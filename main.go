@@ -245,7 +245,12 @@ func (g *Generator) generate(typeName string) {
 		g.Printf("}\n")
 	}
 	//获取原始类型的值
-
+	originValueMethodName := "GetValue"
+	originTypeName := values[0].UnderlyingType
+	g.Printf("\n// %s 获取原始类型值\n", originValueMethodName)
+	g.Printf("func (i %s) %s() %s {\n", typeName, originValueMethodName, originTypeName)
+	g.Printf("\t return %s(i)\n", originTypeName)
+	g.Printf("}\n")
 }
 
 // toCamelCase converts a string to camel case.
@@ -321,6 +326,9 @@ type Value struct {
 	value  uint64 // Will be converted to int64 when needed.
 	signed bool   // Whether the constant is a signed type.
 	str    string // The string representation given by the "go/constant" package.
+
+	// add by 甘向东：增加底层类型
+	UnderlyingType string
 }
 
 func (v *Value) String() string {
@@ -424,6 +432,9 @@ func (f *File) genDecl(node ast.Node) bool {
 				value:        u64,
 				signed:       info&types.IsUnsigned == 0,
 				str:          value.String(),
+
+				// add by 甘向东：增加底层类型
+				UnderlyingType: obj.Type().Underlying().String(),
 			}
 			if c := vspec.Comment; f.lineComment && c != nil && len(c.List) == 1 {
 				v.name = strings.TrimSpace(c.Text())
