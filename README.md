@@ -13,7 +13,7 @@ package main
 
 // TestOrderStatus 订单状态
 //
-//go:generate mystringer -type=TestOrderStatus -linecomment
+//go:generate stringer -type=TestOrderStatus -linecomment
 type TestOrderStatus int
 
 const (
