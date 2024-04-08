@@ -72,4 +72,8 @@ func (i TestOrderStatus) IsCancel() bool {
 	return i == TestOrderStatusCancel
 }
 
+// GetValue 获取原始类型值
+func (i TestOrderStatus) GetValue() int {
+	return int(i)
+}
 ```
